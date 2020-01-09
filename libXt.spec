@@ -1,15 +1,12 @@
 Summary: X.Org X11 libXt runtime library
 Name: libXt
-Version: 1.0.7
+Version: 1.1.3
 Release: 1%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0: ftp://ftp.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
-
-Patch0:     libXt-1.0.2-libsm-fix.patch
 
 BuildRequires: pkgconfig(xproto) pkgconfig(x11) pkgconfig(sm)
 
@@ -26,8 +23,6 @@ X.Org X11 libXt development package
 
 %prep
 %setup -q
-
-%patch0 -p1 -b .libsm-fix
 
 %build
 # FIXME: Work around pointer aliasing warnings from compiler for now
@@ -59,7 +54,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(-,root,root,-)
-%{_bindir}/makestrs
+%{_datadir}/doc/%{name}
 %{_includedir}/X11/CallbackI.h
 %{_includedir}/X11/Composite.h
 %{_includedir}/X11/CompositeP.h
@@ -95,10 +90,36 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/X11/Xtos.h
 %{_libdir}/libXt.so
 %{_libdir}/pkgconfig/xt.pc
-%{_mandir}/man1/makestrs.1*
 %{_mandir}/man3/*.3*
 
 %changelog
+* Thu Jul 26 2012 Adam Jackson <ajax@redhat.com> 1.1.3-1
+- libXt 1.1.3
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Thu Mar 15 2012 Adam Jackson <ajax@redhat.com> 1.1.2-2
+- libXt-1.1.2-git.patch: Bugfix from git.
+
+* Thu Mar 08 2012 Adam Jackson <ajax@redhat.com> 1.1.2-1
+- libXt 1.1.2
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Thu Mar 10 2011 Adam Jackson <ajax@redhat.com> 1.1.1-1
+- libXt 1.1.1
+
+* Mon Mar 07 2011 Adam Jackson <ajax@redhat.com> 1.1.0-1
+- libXt 1.1.0
+
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Mon Nov 08 2010 Adam Jackson <ajax@redhat.com> 1.0.9-1
+- libXt 1.0.9
+
 * Tue Oct 13 2009 Adam Jackson <ajax@redhat.com> 1.0.7-1
 - libXt 1.0.7
 
