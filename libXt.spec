@@ -4,8 +4,8 @@
 
 Summary: X.Org X11 libXt runtime library
 Name: libXt
-Version: 1.1.4
-Release: 6.1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.1.5
+Release: 3%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -18,7 +18,7 @@ Source2:    commitid
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
 %endif
 
-Requires: libX11 >= 1.5.99.902
+Requires: libX11%{?_isa} >= 1.5.99.902
 
 BuildRequires: xorg-x11-util-macros
 BuildRequires: autoconf automake libtool
@@ -31,7 +31,7 @@ X.Org X11 libXt runtime library
 %package devel
 Summary: X.Org X11 libXt development package
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 X.Org X11 libXt development package
@@ -46,7 +46,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %configure --disable-static \
   --with-xfile-search-path="%{_sysconfdir}/X11/%%L/%%T/%%N%%C%%S:%{_sysconfdir}/X11/%%l/%%T/\%%N%%C%%S:%{_sysconfdir}/X11/%%T/%%N%%C%%S:%{_sysconfdir}/X11/%%L/%%T/%%N%%S:%{_sysconfdir}/X\11/%%l/%%T/%%N%%S:%{_sysconfdir}/X11/%%T/%%N%%S:%{_datadir}/X11/%%L/%%T/%%N%%C%%S:%{_datadir}/X1\1/%%l/%%T/%%N%%C%%S:%{_datadir}/X11/%%T/%%N%%C%%S:%{_datadir}/X11/%%L/%%T/%%N%%S:%{_datadir}/X11/%%\l/%%T/%%N%%S:%{_datadir}/X11/%%T/%%N%%S"
 
-make %{?_smp_mflags}
+V=1 make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -55,6 +55,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p -m 0755 $RPM_BUILD_ROOT%{_datadir}/X11/app-defaults
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
+# adding to installed docs in order to avoid using %%doc magic
+cp -p COPYING ${RPM_BUILD_ROOT}%{_datadir}/doc/%{name}/COPYING
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -62,15 +65,15 @@ rm -rf $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
-%doc COPYING
 %{_libdir}/libXt.so.6
 %{_libdir}/libXt.so.6.0.0
 %dir %{_datadir}/X11/app-defaults
+# not using %%doc because of side-effect (#1001246)
+%dir %{_docdir}/%{name}
+%{_docdir}/%{name}/COPYING
 
 %files devel
-%defattr(-,root,root,-)
-%{_datadir}/doc/%{name}
+%{_docdir}/%{name}/*.xml
 %{_includedir}/X11/CallbackI.h
 %{_includedir}/X11/Composite.h
 %{_includedir}/X11/CompositeP.h
@@ -109,8 +112,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
-* Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.1.4-6.1
-- Mass rebuild
+* Mon Jan 23 2017 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.1.5-3
+- libXt 1.1.5
+- Merge F25:
+- Fix duplicate documentation (#1001246) by not using %%doc
+- Turn on verbose build output via V=1 make
+- Remove %%defattr
+- Use %%?_isa in explicit package deps
+- Exclude docs from main package
 
 * Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.1.4-6
 - Mass rebuild 2013-12-27
