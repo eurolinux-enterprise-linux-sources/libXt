@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXt runtime library
 Name: libXt
 Version: 1.1.4
-Release: 5%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 6.1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -109,6 +109,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
+* Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.1.4-6.1
+- Mass rebuild
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.1.4-6
+- Mass rebuild 2013-12-27
+
 * Fri May 31 2013 Peter Hutterer <peter.hutterer@redhat.com> 1.1.4-5
 - libXt 1.1.4
 
